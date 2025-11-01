@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Properties</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Properties</h1>
+            <a th:href="@{/properties/new}" class="btn btn-primary">Add Property</a>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <form th:action="@{/properties}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="area" class="form-label">Area</label>
+                        <input type="text" class="form-control" id="area" name="area" 
+                               th:value="${area}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="keyword" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="keyword" name="keyword"
+                               th:value="${keyword}" placeholder="Name or address...">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Area</th>
+                        <th>Address</th>
+                        <th>Plan</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="property : ${properties}">
+                        <td>
+                            <a th:href="@{/properties/{id}(id=${property.id})}" 
+                               th:text="${property.name}">Property name</a>
+                        </td>
+                        <td th:text="${property.area}">Area</td>
+                        <td th:text="${property.address}">Address</td>
+                        <td th:text="${property.plan}">Plan</td>
+                        <td>
+                            <a th:href="@{/properties/{id}/edit(id=${property.id})}" 
+                               class="btn btn-sm btn-primary">Edit</a>
+                            <form th:action="@{/properties/{id}/delete(id=${property.id})}" 
+                                  method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" 
+                                        onclick="return confirm('Are you sure you want to delete this property?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(properties)}">
+                        <td colspan="5" class="text-center">No properties found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

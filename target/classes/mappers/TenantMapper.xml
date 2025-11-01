@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.TenantMapper">
+    
+    <select id="findAll" resultType="Tenant">
+        SELECT * FROM tenants ORDER BY full_name
+    </select>
+    
+    <select id="findById" resultType="Tenant">
+        SELECT * FROM tenants WHERE id = #{id}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tenants (full_name, phone, email)
+        VALUES (#{fullName}, #{phone}, #{email})
+    </insert>
+    
+    <update id="update">
+        UPDATE tenants 
+        SET full_name = #{fullName},
+            phone = #{phone},
+            email = #{email},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delete">
+        DELETE FROM tenants WHERE id = #{id}
+    </delete>
+</mapper>

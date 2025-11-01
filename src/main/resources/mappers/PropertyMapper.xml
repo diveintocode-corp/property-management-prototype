@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.PropertyMapper">
+    
+    <select id="findAll" resultType="Property">
+        SELECT * FROM properties ORDER BY name
+    </select>
+    
+    <select id="findById" resultType="Property">
+        SELECT * FROM properties WHERE id = #{id}
+    </select>
+    
+    <select id="findByAreaAndKeyword" resultType="Property">
+        SELECT * FROM properties 
+        WHERE (#{area} IS NULL OR area = #{area})
+        AND (#{keyword} IS NULL OR 
+             LOWER(name) LIKE LOWER(CONCAT('%', #{keyword}, '%')) OR 
+             LOWER(address) LIKE LOWER(CONCAT('%', #{keyword}, '%')))
+        ORDER BY name
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO properties (name, address, area, plan)
+        VALUES (#{name}, #{address}, #{area}, #{plan})
+    </insert>
+    
+    <update id="update">
+        UPDATE properties 
+        SET name = #{name},
+            address = #{address},
+            area = #{area},
+            plan = #{plan},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delete">
+        DELETE FROM properties WHERE id = #{id}
+    </delete>
+</mapper>

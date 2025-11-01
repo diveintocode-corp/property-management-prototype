@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">Lease Form</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
+                       th:if="${lease.propertyId != null}">
+                        <span th:text="${lease.property?.name}">Property</span>
+                    </a>
+                    <a th:href="@{/properties}" th:unless="${lease.propertyId != null}">Properties</a>
+                </li>
+                <li class="breadcrumb-item active" 
+                    th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">
+                    Lease Form
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4" 
+                            th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">
+                            Lease Form
+                        </h2>
+
+                        <form th:action="@{/leases}" method="post" th:object="${lease}">
+                            <input type="hidden" th:field="*{id}">
+
+                            <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">
+                                    Global error
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="propertyId" class="form-label">Property</label>
+                                <select class="form-select" th:field="*{propertyId}"
+                                        th:classappend="${#fields.hasErrors('propertyId')} ? 'is-invalid'"
+                                        th:disabled="${lease.propertyId != null}">
+                                    <option value="">Select property...</option>
+                                    <option th:each="prop : ${properties}"
+                                            th:value="${prop.id}"
+                                            th:text="${prop.name}">
+                                        Property name
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{propertyId}">
+                                    Property error
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tenantId" class="form-label">Tenant</label>
+                                <select class="form-select" th:field="*{tenantId}"
+                                        th:classappend="${#fields.hasErrors('tenantId')} ? 'is-invalid'">
+                                    <option value="">Select tenant...</option>
+                                    <option th:each="ten : ${tenants}"
+                                            th:value="${ten.id}"
+                                            th:text="${ten.fullName}">
+                                        Tenant name
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{tenantId}">
+                                    Tenant error
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="rent" class="form-label">Monthly Rent</label>
+                                <input type="number" class="form-control" th:field="*{rent}"
+                                       th:classappend="${#fields.hasErrors('rent')} ? 'is-invalid'">
+                                <div class="invalid-feedback" th:errors="*{rent}">
+                                    Rent error
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="deposit" class="form-label">Security Deposit</label>
+                                <input type="number" class="form-control" th:field="*{deposit}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" th:field="*{startDate}"
+                                       th:classappend="${#fields.hasErrors('startDate')} ? 'is-invalid'">
+                                <div class="invalid-feedback" th:errors="*{startDate}">
+                                    Start date error
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" th:field="*{endDate}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" th:field="*{status}"
+                                        th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'">
+                                    <option th:each="status : ${statusOptions}"
+                                            th:value="${status}"
+                                            th:text="${status}">
+                                        Status
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback" th:errors="*{status}">
+                                    Status error
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
+                               th:if="${lease.propertyId != null}" 
+                               class="btn btn-secondary">Cancel</a>
+                            <a th:href="@{/properties}" 
+                               th:unless="${lease.propertyId != null}" 
+                               class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
