@@ -43,6 +43,7 @@
 
                             <div class="mb-3">
                                 <label for="propertyId" class="form-label">Property</label>
+                                <input type="hidden" th:field="*{propertyId}" th:if="${lease.propertyId != null}">
                                 <select class="form-select" th:field="*{propertyId}"
                                         th:classappend="${#fields.hasErrors('propertyId')} ? 'is-invalid'"
                                         th:disabled="${lease.propertyId != null}">
