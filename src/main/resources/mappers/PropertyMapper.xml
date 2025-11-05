@@ -11,14 +11,7 @@
         SELECT * FROM properties WHERE id = #{id}
     </select>
     
-    <select id="findByAreaAndKeyword" resultType="Property">
-        SELECT * FROM properties 
-        WHERE (#{area} IS NULL OR area = #{area})
-        AND (#{keyword} IS NULL OR 
-             LOWER(name) LIKE LOWER(CONCAT('%', #{keyword}, '%')) OR 
-             LOWER(address) LIKE LOWER(CONCAT('%', #{keyword}, '%')))
-        ORDER BY name
-    </select>
+
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO properties (name, address, area, plan)

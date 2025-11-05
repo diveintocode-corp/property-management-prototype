@@ -20,12 +20,8 @@ public class PropertyController {
     private final LeaseService leaseService;
     
     @GetMapping
-    public String list(@RequestParam(required = false) String area,
-                      @RequestParam(required = false) String keyword,
-                      Model model) {
-        model.addAttribute("properties", propertyService.searchProperties(area, keyword));
-        model.addAttribute("area", area);
-        model.addAttribute("keyword", keyword);
+    public String list(Model model) {
+        model.addAttribute("properties", propertyService.getAllProperties());
         return "properties/list";
     }
     

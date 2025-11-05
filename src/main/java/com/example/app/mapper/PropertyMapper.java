@@ -8,7 +8,7 @@ import java.util.List;
 public interface PropertyMapper {
     List<Property> findAll();
     Property findById(Long id);
-    List<Property> findByAreaAndKeyword(String area, String keyword);
+
     void insert(Property property);
     void update(Property property);
     void delete(Long id);

@@ -12,24 +12,14 @@
             <a th:href="@{/properties/new}" class="btn btn-primary">Add Property</a>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <form th:action="@{/properties}" method="get" class="row g-3">
-                    <div class="col-md-4">
-                        <label for="area" class="form-label">Area</label>
-                        <input type="text" class="form-control" id="area" name="area" 
-                               th:value="${area}">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="keyword" class="form-label">Search</label>
-                        <input type="text" class="form-control" id="keyword" name="keyword"
-                               th:value="${keyword}" placeholder="Name or address...">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
-                    </div>
-                </form>
-            </div>
+        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${message}">Success message</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}">Error message</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
         <div class="table-responsive">

@@ -25,10 +25,7 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyMapper.findById(id);
     }
     
-    @Override
-    public List<Property> searchProperties(String area, String keyword) {
-        return propertyMapper.findByAreaAndKeyword(area, keyword);
-    }
+
     
     @Override
     @Transactional

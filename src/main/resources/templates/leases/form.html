@@ -91,7 +91,9 @@
 
                             <div class="mb-3">
                                 <label for="startDate" class="form-label">Start Date</label>
-                                <input type="date" class="form-control" th:field="*{startDate}"
+                                <input type="date" class="form-control" 
+                                       name="startDate" 
+                                       th:value="${#temporals.format(lease.startDate, 'YYYY-MM-dd')}"
                                        th:classappend="${#fields.hasErrors('startDate')} ? 'is-invalid'">
                                 <div class="invalid-feedback" th:errors="*{startDate}">
                                     Start date error
@@ -100,7 +102,9 @@
 
                             <div class="mb-3">
                                 <label for="endDate" class="form-label">End Date</label>
-                                <input type="date" class="form-control" th:field="*{endDate}">
+                                <input type="date" class="form-control" 
+                                       name="endDate"
+                                       th:value="${lease.endDate != null ? #temporals.format(lease.endDate, 'YYYY-MM-dd') : ''}">
                             </div>
 
                             <div class="mb-3">
