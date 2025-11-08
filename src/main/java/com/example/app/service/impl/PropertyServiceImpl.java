@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * PropertyServiceインターフェースの実装クラス。
+ * 物件情報の管理に関するビジネスロジックを実装します。
+ */
 @Service
 @RequiredArgsConstructor
 public class PropertyServiceImpl implements PropertyService {

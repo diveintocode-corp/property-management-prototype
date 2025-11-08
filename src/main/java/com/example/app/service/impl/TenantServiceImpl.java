@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * TenantServiceインターフェースの実装クラス。
+ * 入居者情報の管理に関するビジネスロジックを実装します。
+ */
 @Service
 @RequiredArgsConstructor
 public class TenantServiceImpl implements TenantService {
