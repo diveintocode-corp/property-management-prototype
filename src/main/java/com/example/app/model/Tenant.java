@@ -18,7 +18,7 @@ public class Tenant {
      * 入居者の氏名
      * 必須項目として設定されています
      */
-    @NotBlank(message = "Full name is required")
+    @NotBlank(message = "氏名を入力してください")
     private String fullName;
     
     /** 
@@ -31,7 +31,7 @@ public class Tenant {
      * メールアドレス
      * 有効なメールアドレス形式である必要があります
      */
-    @Email(message = "Please provide a valid email address")
+    @Email(message = "有効なメールアドレスを入力してください")
     private String email;
     
     private LocalDateTime createdAt;

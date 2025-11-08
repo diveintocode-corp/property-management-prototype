@@ -17,21 +17,21 @@ public class Property {
      * 物件名
      * 必須項目として設定されています
      */
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "物件名を入力してください")
     private String name;
     
     /** 
      * 物件の所在地住所
      * 必須項目として設定されています
      */
-    @NotBlank(message = "Address is required")
+    @NotBlank(message = "所在地を入力してください")
     private String address;
     
     /** 
      * 物件の面積
      * 必須項目として設定されています
      */
-    @NotBlank(message = "Area is required")
+    @NotBlank(message = "面積を入力してください")
     private String area;
     
     /** 

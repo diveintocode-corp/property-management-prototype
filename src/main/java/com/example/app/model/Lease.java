@@ -19,29 +19,29 @@ public class Lease {
      * 物件ID
      * 必須項目として設定されています
      */
-    @NotNull(message = "Property is required")
+    @NotNull(message = "物件を選択してください")
     private Long propertyId;
     
     /** 
      * 入居者ID
      * 必須項目として設定されています
      */
-    @NotNull(message = "Tenant is required")
+    @NotNull(message = "入居者を選択してください")
     private Long tenantId;
     
     /** 
      * 月額賃料
      * 必須項目として設定され、正の値である必要があります
      */
-    @NotNull(message = "Rent amount is required")
-    @Positive(message = "Rent must be greater than 0")
+    @NotNull(message = "月額賃料を入力してください")
+    @Positive(message = "月額賃料は0より大きい値を入力してください")
     private Integer rent;
     
     /** 
      * 契約開始日
      * 必須項目として設定されています
      */
-    @NotNull(message = "Start date is required")
+    @NotNull(message = "契約開始日を入力してください")
     private LocalDate startDate;
     
     /** 
@@ -55,14 +55,14 @@ public class Lease {
      * 必須項目として設定されています
      * 値: ACTIVE（有効）、NOTICE（解約予告）、ENDED（終了）
      */
-    @NotNull(message = "Status is required")
+    @NotNull(message = "契約状態を選択してください")
     private String status;
     
     /** 
      * 敷金
      * 正の値である必要があります
      */
-    @Positive(message = "Deposit must be greater than 0")
+    @Positive(message = "敷金は0より大きい値を入力してください")
     private Integer deposit;
     
     /** レコード作成日時 */
