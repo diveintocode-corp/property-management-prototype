@@ -1,61 +1,46 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <title>Properties</title>
-</head>
-<body>
-    <div layout:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Properties</h1>
-            <a th:href="@{/properties/new}" class="btn btn-primary">Add Property</a>
+<th:block layout:decorate="~{layout/base}">
+    <th:block layout:fragment="content">
+        <div class="section-header">
+            <h1 class="section-title">物件一覧</h1>
+            <a th:href="@{/properties/new}" class="button primary">物件登録</a>
+        </div>
+            <span th:text="${error}">エラーメッセージ</span>
         </div>
 
-        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${message}">Success message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${error}">Error message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+        <div>
+            <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Area</th>
-                        <th>Address</th>
-                        <th>Plan</th>
-                        <th>Actions</th>
+                        <th>物件名</th>
+                        <th>面積</th>
+                        <th>所在地</th>
+                        <th>プラン</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="property : ${properties}">
                         <td>
                             <a th:href="@{/properties/{id}(id=${property.id})}" 
-                               th:text="${property.name}">Property name</a>
+                               th:text="${property.name}">物件名</a>
                         </td>
-                        <td th:text="${property.area}">Area</td>
-                        <td th:text="${property.address}">Address</td>
-                        <td th:text="${property.plan}">Plan</td>
-                        <td>
+                        <td th:text="${property.area}">面積</td>
+                        <td th:text="${property.address}">所在地</td>
+                        <td th:text="${property.plan}">プラン</td>
+                        <td class="actions">
                             <a th:href="@{/properties/{id}/edit(id=${property.id})}" 
-                               class="btn btn-sm btn-primary">Edit</a>
+                               class="button primary">編集</a>
                             <form th:action="@{/properties/{id}/delete(id=${property.id})}" 
-                                  method="post" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-danger" 
-                                        onclick="return confirm('Are you sure you want to delete this property?')">
-                                    Delete
+                                  method="post">
+                                <button type="submit" class="button danger" 
+                                        onclick="return confirm('この物件を削除してもよろしいですか？')">
+                                    削除
                                 </button>
                             </form>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(properties)}">
-                        <td colspan="5" class="text-center">No properties found</td>
+                        <td colspan="5" class="text-center">物件が見つかりません</td>
                     </tr>
                 </tbody>
             </table>

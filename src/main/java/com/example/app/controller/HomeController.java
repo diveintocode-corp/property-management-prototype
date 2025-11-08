@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     
     /**
-     * アプリケーションのホーム画面を表示します。
+     * ルートURLにアクセスした際に物件一覧ページにリダイレクトします。
      * 
-     * @return index.htmlテンプレートの名前
+     * @return 物件一覧ページへのリダイレクト
      */
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/properties";
     }
 }

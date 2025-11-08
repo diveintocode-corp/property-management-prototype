@@ -1,75 +1,61 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <title th:text="${property.id == null ? 'Add Property' : 'Edit Property'}">Property Form</title>
-</head>
-<body>
-    <div layout:fragment="content">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/properties}">Properties</a></li>
-                <li class="breadcrumb-item active" 
-                    th:text="${property.id == null ? 'Add Property' : 'Edit Property'}">
-                    Property Form
-                </li>
-            </ol>
+<th:block layout:decorate="~{layout/base}">
+    <th:block layout:fragment="content">
+        <nav>
+            <p class="navigation">
+                <a th:href="@{/properties}">物件一覧</a> &gt; 
+                <span th:text="${property.id == null ? '物件登録' : '物件編集'}">物件フォーム</span>
+            </p>
         </nav>
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title" 
-                            th:text="${property.id == null ? 'Add Property' : 'Edit Property'}">
-                            Property Form
-                        </h2>
+        <div class="form-container">
+            <h2 th:text="${property.id == null ? '物件登録' : '物件編集'}">物件フォーム</h2>
 
-                        <form th:action="@{/properties}" method="post" th:object="${property}">
-                            <input type="hidden" th:field="*{id}">
+            <form th:action="@{/properties}" method="post" th:object="${property}" class="property-form">
+                <input type="hidden" th:field="*{id}">
 
-                            <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
-                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">
-                                    Global error
-                                </p>
-                            </div>
+                <div class="message error" th:if="${#fields.hasGlobalErrors()}">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">
+                        システムエラー
+                    </p>
+                </div>
 
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" th:field="*{name}"
-                                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-                                <div class="invalid-feedback" th:errors="*{name}">
-                                    Name error
-                                </div>
-                            </div>
+                <div class="form-group">
+                    <label for="name">物件名</label>
+                    <input type="text" th:field="*{name}"
+                           th:classappend="${#fields.hasErrors('name')} ? 'invalid'">
+                    <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        物件名エラー
+                    </div>
+                </div>
 
-                            <div class="mb-3">
-                                <label for="area" class="form-label">Area</label>
-                                <input type="text" class="form-control" th:field="*{area}"
-                                       th:classappend="${#fields.hasErrors('area')} ? 'is-invalid'">
-                                <div class="invalid-feedback" th:errors="*{area}">
-                                    Area error
-                                </div>
-                            </div>
+                <div class="form-group">
+                    <label for="area">面積</label>
+                    <input type="text" th:field="*{area}"
+                           th:classappend="${#fields.hasErrors('area')} ? 'invalid'">
+                    <div class="error-message" th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
+                        面積エラー
+                    </div>
+                </div>
 
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" th:field="*{address}" rows="3"
-                                          th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
-                                </textarea>
-                                <div class="invalid-feedback" th:errors="*{address}">
-                                    Address error
-                                </div>
-                            </div>
+                <div class="form-group">
+                    <label for="address">所在地</label>
+                    <textarea th:field="*{address}" rows="3"
+                              th:classappend="${#fields.hasErrors('address')} ? 'invalid'">
+                    </textarea>
+                    <div class="error-message" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
+                        所在地エラー
+                    </div>
+                </div>
 
-                            <div class="mb-3">
-                                <label for="plan" class="form-label">Plan</label>
-                                <input type="text" class="form-control" th:field="*{plan}">
-                            </div>
+                <div class="form-group">
+                    <label for="plan">プラン</label>
+                    <input type="text" th:field="*{plan}">
+                </div>
 
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <a th:href="@{/properties}" class="btn btn-secondary">Cancel</a>
+                <div class="form-actions">
+                    <button type="submit" class="button primary">保存</button>
+                    <a th:href="@{/properties}" class="button">キャンセル</a>
+                </div>
                         </form>
                     </div>
                 </div>

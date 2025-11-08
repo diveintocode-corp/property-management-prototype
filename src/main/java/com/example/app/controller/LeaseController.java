@@ -87,10 +87,10 @@ public class LeaseController {
         try {
             if (lease.getId() == null) {
                 leaseService.createLease(lease);
-                redirectAttributes.addFlashAttribute("message", "Lease created successfully");
+                redirectAttributes.addFlashAttribute("message", "賃貸契約を登録しました");
             } else {
                 leaseService.updateLease(lease);
-                redirectAttributes.addFlashAttribute("message", "Lease updated successfully");
+                redirectAttributes.addFlashAttribute("message", "賃貸契約を更新しました");
             }
         } catch (Exception e) {
             bindingResult.reject("error", e.getMessage());
@@ -117,7 +117,7 @@ public class LeaseController {
         
         Long propertyId = lease.getPropertyId();
         leaseService.deleteLease(id);
-        redirectAttributes.addFlashAttribute("message", "Lease deleted successfully");
+        redirectAttributes.addFlashAttribute("message", "賃貸契約を削除しました");
         return "redirect:/properties/" + propertyId;
     }
     

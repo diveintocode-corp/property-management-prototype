@@ -105,10 +105,10 @@ public class PropertyController {
         try {
             if (property.getId() == null) {
                 propertyService.createProperty(property);
-                redirectAttributes.addFlashAttribute("message", "Property created successfully");
+                redirectAttributes.addFlashAttribute("message", "物件を登録しました");
             } else {
                 propertyService.updateProperty(property);
-                redirectAttributes.addFlashAttribute("message", "Property updated successfully");
+                redirectAttributes.addFlashAttribute("message", "物件情報を更新しました");
             }
         } catch (Exception e) {
             bindingResult.reject("error", e.getMessage());
@@ -130,12 +130,12 @@ public class PropertyController {
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         if (leaseService.hasActiveLeases(id)) {
             redirectAttributes.addFlashAttribute("error", 
-                "Cannot delete property: It has active leases");
+                "有効な賃貸契約が存在するため、物件を削除できません");
             return "redirect:/properties/" + id;
         }
         
         propertyService.deleteProperty(id);
-        redirectAttributes.addFlashAttribute("message", "Property deleted successfully");
+        redirectAttributes.addFlashAttribute("message", "物件を削除しました");
         return "redirect:/properties";
     }
 }

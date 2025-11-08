@@ -88,10 +88,10 @@ public class TenantController {
         try {
             if (tenant.getId() == null) {
                 tenantService.createTenant(tenant);
-                redirectAttributes.addFlashAttribute("message", "Tenant created successfully");
+                redirectAttributes.addFlashAttribute("message", "入居者を登録しました");
             } else {
                 tenantService.updateTenant(tenant);
-                redirectAttributes.addFlashAttribute("message", "Tenant updated successfully");
+                redirectAttributes.addFlashAttribute("message", "入居者情報を更新しました");
             }
         } catch (Exception e) {
             bindingResult.reject("error", e.getMessage());
@@ -113,12 +113,12 @@ public class TenantController {
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         if (!leaseService.getLeasesByTenantId(id).isEmpty()) {
             redirectAttributes.addFlashAttribute("error", 
-                "Cannot delete tenant: They have associated leases");
+                "賃貸契約が存在するため、入居者を削除できません");
             return "redirect:/tenants";
         }
         
         tenantService.deleteTenant(id);
-        redirectAttributes.addFlashAttribute("message", "Tenant deleted successfully");
+        redirectAttributes.addFlashAttribute("message", "入居者を削除しました");
         return "redirect:/tenants";
     }
 }

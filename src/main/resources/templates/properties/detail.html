@@ -1,109 +1,96 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <title th:text="${property.name}">Property Detail</title>
-</head>
-<body>
-    <div layout:fragment="content">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/properties}">Properties</a></li>
-                <li class="breadcrumb-item active" th:text="${property.name}">Property name</li>
-            </ol>
+<th:block layout:decorate="~{layout/base}">
+    <th:block layout:fragment="content">
+        <nav>
+            <p class="navigation">
+                <a th:href="@{/properties}">物件一覧</a> &gt; 
+                <span th:text="${property.name}">物件名</span>
+            </p>
         </nav>
 
-        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${message}">Success message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${error}">Error message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h2 class="card-title" th:text="${property.name}">Property name</h2>
-                        <dl class="row mt-3">
-                            <dt class="col-sm-3">Area</dt>
-                            <dd class="col-sm-9" th:text="${property.area}">Area</dd>
-
-                            <dt class="col-sm-3">Address</dt>
-                            <dd class="col-sm-9" th:text="${property.address}">Address</dd>
-
-                            <dt class="col-sm-3">Plan</dt>
-                            <dd class="col-sm-9" th:text="${property.plan}">Plan</dd>
-                        </dl>
+                <div class="detail-container">
+            <div class="property-details">
+                <h2 th:text="${property.name}">物件名</h2>
+                <dl class="info-list">
+                    <div class="info-item">
+                        <dt>面積</dt>
+                        <dd th:text="${property.area}">面積</dd>
                     </div>
-                    <div class="card-footer">
-                        <a th:href="@{/properties/{id}/edit(id=${property.id})}" 
-                           class="btn btn-primary">Edit Property</a>
-                        <form th:action="@{/properties/{id}/delete(id=${property.id})}" 
-                              method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger" 
-                                    onclick="return confirm('Are you sure you want to delete this property?')">
-                                Delete Property
-                            </button>
-                        </form>
+
+                    <div class="info-item">
+                        <dt>所在地</dt>
+                        <dd th:text="${property.address}">所在地</dd>
                     </div>
+
+                    <div class="info-item">
+                        <dt>プラン</dt>
+                        <dd th:text="${property.plan}">プラン</dd>
+                    </div>
+                </dl>
+
+                <div class="actions">
+                    <a th:href="@{/properties/{id}/edit(id=${property.id})}" 
+                       class="button primary">物件編集</a>
+                    <form th:action="@{/properties/{id}/delete(id=${property.id})}" 
+                          method="post">
+                        <button type="submit" class="button danger" 
+                                onclick="return confirm('この物件を削除してもよろしいですか？')">
+                            物件削除
+                        </button>
+                    </form>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title mb-0">Lease History</h3>
-                        <a th:href="@{/leases/new(propertyId=${property.id})}" 
-                           class="btn btn-primary btn-sm">Add Lease</a>
-                    </div>
+            <div class="lease-history">
+                <div class="section-header">
+                    <h3>賃貸履歴</h3>
+                    <a th:href="@{/leases/new(propertyId=${property.id})}" 
+                       class="button primary">賃貸登録</a>
+                </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Tenant</th>
-                                        <th>Status</th>
-                                        <th>Rent</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="lease : ${leases}">
-                                        <td th:text="${lease.tenant.fullName}">Tenant name</td>
-                                        <td>
-                                            <span th:class="${'badge ' + 
-                                                (lease.status == 'ACTIVE' ? 'text-bg-success' : 
-                                                lease.status == 'NOTICE' ? 'text-bg-warning' : 'text-bg-secondary')}"
-                                                  th:text="${lease.status}">Status</span>
-                                        </td>
-                                        <td th:text="${lease.rent}">Rent</td>
-                                        <td th:text="${#temporals.format(lease.startDate, 'yyyy-MM-dd')}">
-                                            Start date
-                                        </td>
-                                        <td th:text="${lease.endDate != null ? 
-                                            #temporals.format(lease.endDate, 'yyyy-MM-dd') : '-'}">
-                                            End date
-                                        </td>
-                                        <td>
-                                            <a th:href="@{/leases/{id}/edit(id=${lease.id})}" 
-                                               class="btn btn-sm btn-primary">Edit</a>
-                                            <form th:action="@{/leases/{id}/delete(id=${lease.id})}" 
-                                                  method="post" class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-danger" 
-                                                        onclick="return confirm('Are you sure you want to delete this lease?')">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${#lists.isEmpty(leases)}">
-                                        <td colspan="6" class="text-center">No leases found</td>
-                                    </tr>
+                        <table>
+                        <thead>
+                            <tr>
+                                <th>入居者</th>
+                                <th>状態</th>
+                                <th>賃料</th>
+                                <th>開始日</th>
+                                <th>終了日</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="lease : ${leases}">
+                                <td th:text="${lease.tenant.fullName}">入居者名</td>
+                                <td>
+                                    <span th:class="${'status-badge ' + 
+                                        (lease.status == 'ACTIVE' ? 'active' : 
+                                        lease.status == 'NOTICE' ? 'notice' : 'ended')}"
+                                          th:text="${lease.status == 'ACTIVE' ? '契約中' : 
+                                                  lease.status == 'NOTICE' ? '解約予定' : '終了'}">状態</span>
+                                </td>
+                                <td th:text="${lease.rent}">賃料</td>
+                                <td th:text="${#temporals.format(lease.startDate, 'yyyy年MM月dd日')}">
+                                    開始日
+                                </td>
+                                <td th:text="${lease.endDate != null ? 
+                                    #temporals.format(lease.endDate, 'yyyy年MM月dd日') : '-'}">
+                                    終了日
+                                </td>
+                                <td class="actions">
+                                    <a th:href="@{/leases/{id}/edit(id=${lease.id})}" 
+                                       class="button primary">編集</a>
+                                    <form th:action="@{/leases/{id}/delete(id=${lease.id})}" 
+                                          method="post">
+                                        <button type="submit" class="button danger" 
+                                                onclick="return confirm('この賃貸契約を削除してもよろしいですか？')">
+                                            削除
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(leases)}">
+                                <td colspan="6" class="text-center">賃貸履歴が見つかりません</td>
+                            </tr>
                                 </tbody>
                             </table>
                         </div>

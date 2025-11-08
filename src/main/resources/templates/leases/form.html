@@ -1,134 +1,124 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <title th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">Lease Form</title>
-</head>
-<body>
-    <div layout:fragment="content">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
-                       th:if="${lease.propertyId != null}">
-                        <span th:text="${lease.property?.name}">Property</span>
-                    </a>
-                    <a th:href="@{/properties}" th:unless="${lease.propertyId != null}">Properties</a>
-                </li>
-                <li class="breadcrumb-item active" 
-                    th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">
-                    Lease Form
-                </li>
-            </ol>
+<th:block layout:decorate="~{layout/base}">
+    <th:block layout:fragment="content">
+        <nav>
+            <p class="navigation">
+                <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
+                   th:if="${lease.propertyId != null}">
+                    <span th:text="${lease.property?.name}">物件名</span>
+                </a>
+                <a th:href="@{/properties}" th:unless="${lease.propertyId != null}">物件一覧</a>
+                &gt; 
+                <span th:text="${lease.id == null ? '賃貸契約登録' : '賃貸契約編集'}">
+                    賃貸契約フォーム
+                </span>
+            </p>
         </nav>
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title mb-4" 
-                            th:text="${lease.id == null ? 'Add Lease' : 'Edit Lease'}">
-                            Lease Form
-                        </h2>
+        <div class="form-container">
+            <h2 th:text="${lease.id == null ? '賃貸契約登録' : '賃貸契約編集'}">
+                賃貸契約フォーム
+            </h2>
 
-                        <form th:action="@{/leases}" method="post" th:object="${lease}">
+                        <form th:action="@{/leases}" method="post" th:object="${lease}" class="property-form">
                             <input type="hidden" th:field="*{id}">
 
-                            <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
+                            <div class="message error" th:if="${#fields.hasGlobalErrors()}">
                                 <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">
-                                    Global error
+                                    システムエラー
                                 </p>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="propertyId" class="form-label">Property</label>
+                            <div class="form-group">
+                                <label for="propertyId">物件</label>
                                 <input type="hidden" th:field="*{propertyId}" th:if="${lease.propertyId != null}">
-                                <select class="form-select" th:field="*{propertyId}"
-                                        th:classappend="${#fields.hasErrors('propertyId')} ? 'is-invalid'"
+                                <select th:field="*{propertyId}"
+                                        th:classappend="${#fields.hasErrors('propertyId')} ? 'invalid'"
                                         th:disabled="${lease.propertyId != null}">
-                                    <option value="">Select property...</option>
+                                    <option value="">物件を選択してください</option>
                                     <option th:each="prop : ${properties}"
                                             th:value="${prop.id}"
                                             th:text="${prop.name}">
-                                        Property name
+                                        物件名
                                     </option>
                                 </select>
-                                <div class="invalid-feedback" th:errors="*{propertyId}">
-                                    Property error
+                                <div class="error-message" th:if="${#fields.hasErrors('propertyId')}" th:errors="*{propertyId}">
+                                    物件エラー
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="tenantId" class="form-label">Tenant</label>
-                                <select class="form-select" th:field="*{tenantId}"
-                                        th:classappend="${#fields.hasErrors('tenantId')} ? 'is-invalid'">
-                                    <option value="">Select tenant...</option>
+                            <div class="form-group">
+                                <label for="tenantId">入居者</label>
+                                <select th:field="*{tenantId}"
+                                        th:classappend="${#fields.hasErrors('tenantId')} ? 'invalid'">
+                                    <option value="">入居者を選択してください</option>
                                     <option th:each="ten : ${tenants}"
                                             th:value="${ten.id}"
                                             th:text="${ten.fullName}">
-                                        Tenant name
+                                        入居者名
                                     </option>
                                 </select>
-                                <div class="invalid-feedback" th:errors="*{tenantId}">
-                                    Tenant error
+                                <div class="error-message" th:if="${#fields.hasErrors('tenantId')}" th:errors="*{tenantId}">
+                                    入居者エラー
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="rent" class="form-label">Monthly Rent</label>
-                                <input type="number" class="form-control" th:field="*{rent}"
-                                       th:classappend="${#fields.hasErrors('rent')} ? 'is-invalid'">
-                                <div class="invalid-feedback" th:errors="*{rent}">
-                                    Rent error
+                            <div class="form-group">
+                                <label for="rent">月額賃料</label>
+                                <input type="number" th:field="*{rent}"
+                                       th:classappend="${#fields.hasErrors('rent')} ? 'invalid'">
+                                <div class="error-message" th:if="${#fields.hasErrors('rent')}" th:errors="*{rent}">
+                                    賃料エラー
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="deposit" class="form-label">Security Deposit</label>
-                                <input type="number" class="form-control" th:field="*{deposit}">
+                            <div class="form-group">
+                                <label for="deposit">敷金</label>
+                                <input type="number" th:field="*{deposit}">
                             </div>
 
-                            <div class="mb-3">
-                                <label for="startDate" class="form-label">Start Date</label>
-                                <input type="date" class="form-control" 
+                            <div class="form-group">
+                                <label for="startDate">開始日</label>
+                                <input type="date" 
                                        name="startDate" 
                                        th:value="${#temporals.format(lease.startDate, 'YYYY-MM-dd')}"
-                                       th:classappend="${#fields.hasErrors('startDate')} ? 'is-invalid'">
-                                <div class="invalid-feedback" th:errors="*{startDate}">
-                                    Start date error
+                                       th:classappend="${#fields.hasErrors('startDate')} ? 'invalid'">
+                                <div class="error-message" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">
+                                    開始日エラー
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="endDate" class="form-label">End Date</label>
-                                <input type="date" class="form-control" 
+                            <div class="form-group">
+                                <label for="endDate">終了日</label>
+                                <input type="date" 
                                        name="endDate"
                                        th:value="${lease.endDate != null ? #temporals.format(lease.endDate, 'YYYY-MM-dd') : ''}">
                             </div>
 
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select" th:field="*{status}"
-                                        th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'">
+                            <div class="form-group">
+                                <label for="status">状態</label>
+                                <select th:field="*{status}"
+                                        th:classappend="${#fields.hasErrors('status')} ? 'invalid'">
                                     <option th:each="status : ${statusOptions}"
                                             th:value="${status}"
-                                            th:text="${status}">
-                                        Status
+                                            th:text="${status == 'ACTIVE' ? '契約中' : 
+                                                    status == 'NOTICE' ? '解約予定' : '終了'}">
+                                        状態
                                     </option>
                                 </select>
-                                <div class="invalid-feedback" th:errors="*{status}">
-                                    Status error
+                                <div class="error-message" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">
+                                    状態エラー
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
-                               th:if="${lease.propertyId != null}" 
-                               class="btn btn-secondary">Cancel</a>
-                            <a th:href="@{/properties}" 
-                               th:unless="${lease.propertyId != null}" 
-                               class="btn btn-secondary">Cancel</a>
+                            <div class="form-actions">
+                                <button type="submit" class="button primary">保存</button>
+                                <a th:href="@{/properties/{id}(id=${lease.propertyId})}" 
+                                   th:if="${lease.propertyId != null}" 
+                                   class="button">キャンセル</a>
+                                <a th:href="@{/properties}" 
+                                   th:unless="${lease.propertyId != null}" 
+                                   class="button">キャンセル</a>
+                            </div>
                         </form>
                     </div>
                 </div>
