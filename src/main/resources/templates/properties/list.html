@@ -4,10 +4,8 @@
             <h1 class="section-title">物件一覧</h1>
             <a th:href="@{/properties/new}" class="button primary">物件登録</a>
         </div>
-            <span th:text="${error}">エラーメッセージ</span>
-        </div>
 
-        <div>
+        <div class="table-container">
             <table>
                 <thead>
                     <tr>
@@ -45,6 +43,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</body>
-</html>
+    </th:block>
+</th:block>
