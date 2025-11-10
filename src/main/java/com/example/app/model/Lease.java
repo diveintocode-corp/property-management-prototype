@@ -65,6 +65,13 @@ public class Lease {
     @Positive(message = "敷金は0より大きい値を入力してください")
     private Integer deposit;
     
+    /** 
+     * 礼金
+     * 正の値である必要があります
+     */
+    @Positive(message = "礼金は0より大きい値を入力してください")
+    private Integer keymoney;
+    
     /** レコード作成日時 */
     private LocalDateTime createdAt;
     /** レコード更新日時 */

@@ -7,7 +7,7 @@ CREATE TABLE properties (
     name VARCHAR(120) NOT NULL,
     address VARCHAR(255) NOT NULL,
     area VARCHAR(80) NOT NULL,
-    plan VARCHAR(20),
+    rooms VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -30,6 +30,7 @@ CREATE TABLE leases (
     end_date DATE,
     status VARCHAR(20) NOT NULL,
     deposit INT,
+    keymoney INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (property_id) REFERENCES properties(id),

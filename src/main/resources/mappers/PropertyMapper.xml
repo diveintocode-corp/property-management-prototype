@@ -14,8 +14,8 @@
 
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO properties (name, address, area, plan)
-        VALUES (#{name}, #{address}, #{area}, #{plan})
+        INSERT INTO properties (name, address, area, rooms)
+        VALUES (#{name}, #{address}, #{area}, #{rooms})
     </insert>
     
     <update id="update">
@@ -23,7 +23,7 @@
         SET name = #{name},
             address = #{address},
             area = #{area},
-            plan = #{plan},
+            rooms = #{rooms},
             updated_at = CURRENT_TIMESTAMP
         WHERE id = #{id}
     </update>

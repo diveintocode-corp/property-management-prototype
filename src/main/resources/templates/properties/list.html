@@ -12,9 +12,9 @@
                 <thead>
                     <tr>
                         <th>物件名</th>
-                        <th>面積</th>
+                        <th>面積 (m²)</th>
                         <th>所在地</th>
-                        <th>プラン</th>
+                        <th>間取り</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -26,7 +26,7 @@
                         </td>
                         <td th:text="${property.area}">面積</td>
                         <td th:text="${property.address}">所在地</td>
-                        <td th:text="${property.plan}">プラン</td>
+                        <td th:text="${property.rooms}">間取り</td>
                         <td class="actions">
                             <a th:href="@{/properties/{id}/edit(id=${property.id})}" 
                                class="button primary">編集</a>

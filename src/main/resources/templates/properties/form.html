@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="area">面積</label>
+                    <label for="area">面積 (m²)</label>
                     <input type="text" th:field="*{area}"
                            th:classappend="${#fields.hasErrors('area')} ? 'invalid'">
                     <div class="error-message" th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
@@ -48,8 +48,32 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="plan">プラン</label>
-                    <input type="text" th:field="*{plan}">
+                    <label for="rooms">間取り</label>
+                    <select th:field="*{rooms}" id="rooms"
+                            th:classappend="${#fields.hasErrors('rooms')} ? 'invalid'">
+                        <option value="">選択してください</option>
+                        <option value="1R">1R</option>
+                        <option value="1K">1K</option>
+                        <option value="1DK">1DK</option>
+                        <option value="1LDK">1LDK</option>
+                        <option value="2K">2K</option>
+                        <option value="2DK">2DK</option>
+                        <option value="2LDK">2LDK</option>
+                        <option value="3K">3K</option>
+                        <option value="3DK">3DK</option>
+                        <option value="3LDK">3LDK</option>
+                        <option value="4K">4K</option>
+                        <option value="4DK">4DK</option>
+                        <option value="4LDK">4LDK</option>
+                        <option value="5K">5K</option>
+                        <option value="5DK">5DK</option>
+                        <option value="5LDK">5LDK</option>
+                        <option value="スタジオ">スタジオ</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <div class="error-message" th:if="${#fields.hasErrors('rooms')}" th:errors="*{rooms}">
+                        間取りエラー
+                    </div>
                 </div>
 
                 <div class="form-actions">

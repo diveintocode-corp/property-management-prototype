@@ -73,7 +73,20 @@
 
                             <div class="form-group">
                                 <label for="deposit">敷金</label>
-                                <input type="number" th:field="*{deposit}">
+                                <input type="number" th:field="*{deposit}"
+                                       th:classappend="${#fields.hasErrors('deposit')} ? 'invalid'">
+                                <div class="error-message" th:if="${#fields.hasErrors('deposit')}" th:errors="*{deposit}">
+                                    敷金エラー
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="keymoney">礼金</label>
+                                <input type="number" th:field="*{keymoney}"
+                                       th:classappend="${#fields.hasErrors('keymoney')} ? 'invalid'">
+                                <div class="error-message" th:if="${#fields.hasErrors('keymoney')}" th:errors="*{keymoney}">
+                                    礼金エラー
+                                </div>
                             </div>
 
                             <div class="form-group">

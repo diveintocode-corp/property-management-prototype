@@ -1,0 +1,49 @@
+-- Seed data for Property Management System
+
+-- Insert 10 Properties
+INSERT INTO properties (name, address, area, rooms, created_at, updated_at) VALUES
+('サニーアパート 101号室', '東京都渋谷区神南1-2-3', '25.5', '1K', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('グリーンハイツ 205号室', '東京都新宿区新宿3-15-10', '35.2', '1LDK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('パークマンション 301号室', '東京都港区六本木4-5-6', '42.8', '2LDK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('シティタワー 502号室', '東京都千代田区丸の内1-1-1', '55.3', '3LDK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('ロイヤルレジデンス 201号室', '東京都世田谷区三軒茶屋2-10-5', '28.0', '1DK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('オーシャンビュー 401号室', '神奈川県横浜市みなとみらい1-2-3', '38.5', '2DK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('フォレストハウス 102号室', '東京都杉並区高円寺3-20-8', '22.3', '1R', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('エメラルドコート 303号室', '東京都目黒区中目黒4-15-12', '45.0', '2LDK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('スタジオアパート 105号室', '東京都台東区上野5-6-7', '18.5', 'スタジオ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('プレミアムレジデンス 601号室', '東京都中央区銀座2-8-9', '62.5', '4LDK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Insert 10 Tenants
+INSERT INTO tenants (full_name, phone, email, created_at, updated_at) VALUES
+('山田 太郎', '090-1234-5678', 'yamada.taro@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('佐藤 花子', '080-2345-6789', 'sato.hanako@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('鈴木 一郎', '070-3456-7890', 'suzuki.ichiro@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('田中 美咲', '090-4567-8901', 'tanaka.misaki@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('伊藤 健太', '080-5678-9012', 'ito.kenta@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('渡辺 さくら', '070-6789-0123', 'watanabe.sakura@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('中村 大輔', '090-7890-1234', 'nakamura.daisuke@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('小林 愛美', '080-8901-2345', 'kobayashi.ami@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('加藤 翔太', '070-9012-3456', 'kato.shota@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('吉田 麻衣', '090-0123-4567', 'yoshida.mai@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Insert Leases (mixing active, notice, and ended statuses)
+INSERT INTO leases (property_id, tenant_id, rent, start_date, end_date, status, deposit, keymoney, created_at, updated_at) VALUES
+-- Active leases
+(1, 1, 85000, '2023-04-01', NULL, 'ACTIVE', 170000, 85000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 120000, '2023-06-15', NULL, 'ACTIVE', 240000, 120000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 3, 180000, '2023-03-01', NULL, 'ACTIVE', 360000, 180000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 5, 95000, '2023-05-01', NULL, 'ACTIVE', 190000, 95000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 7, 65000, '2023-07-01', NULL, 'ACTIVE', 130000, 65000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 9, 55000, '2023-08-01', NULL, 'ACTIVE', 110000, 55000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Leases with notice (解約予告)
+(4, 4, 220000, '2022-01-15', '2024-12-31', 'NOTICE', 440000, 220000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 6, 135000, '2023-02-01', '2024-11-30', 'NOTICE', 270000, 135000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 8, 195000, '2023-01-10', '2024-10-31', 'NOTICE', 390000, 195000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Ended leases
+(1, 10, 85000, '2021-04-01', '2023-03-31', 'ENDED', 170000, 85000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, 120000, '2021-06-01', '2023-05-31', 'ENDED', 240000, 120000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 2, 180000, '2020-10-01', '2023-02-28', 'ENDED', 360000, 180000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 3, 280000, '2022-03-01', '2023-08-31', 'ENDED', 560000, 280000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+

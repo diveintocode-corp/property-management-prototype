@@ -38,7 +38,7 @@ public class Property {
      * 物件の間取り
      * 任意項目として設定されています
      */
-    private String plan;
+    private String rooms;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

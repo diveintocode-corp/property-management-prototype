@@ -1,46 +1,39 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <title>Tenants</title>
-</head>
-<body>
-    <div layout:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Tenants</h1>
-            <a th:href="@{/tenants/new}" class="btn btn-primary">Add Tenant</a>
+<th:block layout:decorate="~{layout/base}">
+    <th:block layout:fragment="content">
+        <div class="section-header">
+            <h1 class="section-title">入居者一覧</h1>
+            <a th:href="@{/tenants/new}" class="button primary">入居者登録</a>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+        <div>
+            <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
+                        <th>氏名</th>
+                        <th>メールアドレス</th>
+                        <th>電話番号</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="tenant : ${tenants}">
-                        <td th:text="${tenant.fullName}">Full name</td>
-                        <td th:text="${tenant.email}">Email</td>
-                        <td th:text="${tenant.phone}">Phone</td>
-                        <td>
+                        <td th:text="${tenant.fullName}">氏名</td>
+                        <td th:text="${tenant.email}">メールアドレス</td>
+                        <td th:text="${tenant.phone}">電話番号</td>
+                        <td class="actions">
                             <a th:href="@{/tenants/{id}/edit(id=${tenant.id})}" 
-                               class="btn btn-sm btn-primary">Edit</a>
+                               class="button primary">編集</a>
                             <form th:action="@{/tenants/{id}/delete(id=${tenant.id})}" 
-                                  method="post" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-danger" 
-                                        onclick="return confirm('Are you sure you want to delete this tenant?')">
-                                    Delete
+                                  method="post">
+                                <button type="submit" class="button danger" 
+                                        onclick="return confirm('この入居者を削除してもよろしいですか？')">
+                                    削除
                                 </button>
                             </form>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(tenants)}">
-                        <td colspan="4" class="text-center">No tenants found</td>
+                        <td colspan="4" class="text-center">入居者が見つかりません</td>
                     </tr>
                 </tbody>
             </table>

@@ -12,6 +12,7 @@
         <result property="endDate" column="end_date"/>
         <result property="status" column="status"/>
         <result property="deposit" column="deposit"/>
+        <result property="keymoney" column="keymoney"/>
         <result property="createdAt" column="lease_created_at"/>
         <result property="updatedAt" column="lease_updated_at"/>
         <association property="property" javaType="Property">
@@ -19,7 +20,7 @@
             <result property="name" column="property_name"/>
             <result property="address" column="property_address"/>
             <result property="area" column="property_area"/>
-            <result property="plan" column="property_plan"/>
+            <result property="rooms" column="property_rooms"/>
         </association>
         <association property="tenant" javaType="Tenant">
             <id property="id" column="tenant_id"/>
@@ -38,12 +39,13 @@
                l.end_date,
                l.status,
                l.deposit,
+               l.keymoney,
                l.created_at as lease_created_at,
                l.updated_at as lease_updated_at,
                p.name as property_name,
                p.address as property_address,
                p.area as property_area,
-               p.plan as property_plan,
+               p.rooms as property_rooms,
                t.full_name as tenant_full_name,
                t.phone as tenant_phone,
                t.email as tenant_email
@@ -82,8 +84,8 @@
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO leases (property_id, tenant_id, rent, start_date, end_date, status, deposit)
-        VALUES (#{propertyId}, #{tenantId}, #{rent}, #{startDate}, #{endDate}, #{status}, #{deposit})
+        INSERT INTO leases (property_id, tenant_id, rent, start_date, end_date, status, deposit, keymoney)
+        VALUES (#{propertyId}, #{tenantId}, #{rent}, #{startDate}, #{endDate}, #{status}, #{deposit}, #{keymoney})
     </insert>
     
     <update id="update">
@@ -95,6 +97,7 @@
             end_date = #{endDate},
             status = #{status},
             deposit = #{deposit},
+            keymoney = #{keymoney},
             updated_at = CURRENT_TIMESTAMP
         WHERE id = #{id}
     </update>
