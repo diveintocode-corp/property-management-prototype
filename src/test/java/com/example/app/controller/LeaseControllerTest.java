@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -66,6 +68,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void newForm_ShouldReturnFormPage() throws Exception {
         // Given
         List<Property> properties = Arrays.asList(testProperty);
@@ -87,6 +90,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void newForm_WithPropertyId_ShouldPreSelectProperty() throws Exception {
         // Given
         when(propertyService.getPropertyById(1L)).thenReturn(testProperty);
@@ -103,6 +107,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenLeaseExists_ShouldReturnFormPage() throws Exception {
         // Given
         when(leaseService.getLeaseById(1L)).thenReturn(testLease);
@@ -121,6 +126,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenLeaseDoesNotExist_ShouldRedirect() throws Exception {
         // Given
         when(leaseService.getLeaseById(999L)).thenReturn(null);
@@ -132,6 +138,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenNewLease_ShouldCreateAndRedirect() throws Exception {
         // Given
         doNothing().when(leaseService).createLease(any(Lease.class));
@@ -140,6 +147,7 @@ class LeaseControllerTest {
 
         // When & Then
         mockMvc.perform(post("/leases")
+                .with(csrf())
                 .param("propertyId", "1")
                 .param("tenantId", "1")
                 .param("rent", "100000")
@@ -155,6 +163,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenUpdateLease_ShouldUpdateAndRedirect() throws Exception {
         // Given
         doNothing().when(leaseService).updateLease(any(Lease.class));
@@ -163,6 +172,7 @@ class LeaseControllerTest {
 
         // When & Then
         mockMvc.perform(post("/leases")
+                .with(csrf())
                 .param("id", "1")
                 .param("propertyId", "1")
                 .param("tenantId", "1")
@@ -179,6 +189,7 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenValidationFails_ShouldReturnForm() throws Exception {
         // Given
         when(propertyService.getAllProperties()).thenReturn(Arrays.asList(testProperty));
@@ -186,6 +197,7 @@ class LeaseControllerTest {
 
         // When & Then
         mockMvc.perform(post("/leases")
+                .with(csrf())
                 .param("propertyId", "") // Invalid: empty propertyId
                 .param("rent", "-1000")) // Invalid: negative rent
                 .andExpect(status().isOk())
@@ -196,13 +208,15 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_ShouldDeleteAndRedirect() throws Exception {
         // Given
         when(leaseService.getLeaseById(1L)).thenReturn(testLease);
         doNothing().when(leaseService).deleteLease(1L);
 
         // When & Then
-        mockMvc.perform(post("/leases/1/delete"))
+        mockMvc.perform(post("/leases/1/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/properties/1"))
                 .andExpect(flash().attributeExists("message"));
@@ -212,12 +226,14 @@ class LeaseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_WhenLeaseDoesNotExist_ShouldRedirect() throws Exception {
         // Given
         when(leaseService.getLeaseById(999L)).thenReturn(null);
 
         // When & Then
-        mockMvc.perform(post("/leases/999/delete"))
+        mockMvc.perform(post("/leases/999/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/properties"));
         

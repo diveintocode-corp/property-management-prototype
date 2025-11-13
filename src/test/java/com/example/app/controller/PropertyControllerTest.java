@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,6 +49,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void list_ShouldReturnPropertyListPage() throws Exception {
         // Given
         List<Property> properties = Arrays.asList(testProperty);
@@ -62,6 +65,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void detail_WhenPropertyExists_ShouldReturnDetailPage() throws Exception {
         // Given
         when(propertyService.getPropertyById(1L)).thenReturn(testProperty);
@@ -78,6 +82,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void detail_WhenPropertyDoesNotExist_ShouldRedirectToList() throws Exception {
         // Given
         when(propertyService.getPropertyById(999L)).thenReturn(null);
@@ -91,6 +96,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void newForm_ShouldReturnFormPage() throws Exception {
         // When & Then
         mockMvc.perform(get("/properties/new"))
@@ -100,6 +106,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenPropertyExists_ShouldReturnFormPage() throws Exception {
         // Given
         when(propertyService.getPropertyById(1L)).thenReturn(testProperty);
@@ -114,6 +121,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenPropertyDoesNotExist_ShouldRedirectToList() throws Exception {
         // Given
         when(propertyService.getPropertyById(999L)).thenReturn(null);
@@ -125,6 +133,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenNewProperty_ShouldCreateAndRedirect() throws Exception {
         // Given
         Property newProperty = new Property();
@@ -136,6 +145,7 @@ class PropertyControllerTest {
 
         // When & Then
         mockMvc.perform(post("/properties")
+                .with(csrf())
                 .param("name", "新規物件")
                 .param("address", "東京都新宿区1-1-1")
                 .param("area", "30.0")
@@ -148,6 +158,7 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenUpdateProperty_ShouldUpdateAndRedirect() throws Exception {
         // Given
         testProperty.setName("更新された物件");
@@ -155,6 +166,7 @@ class PropertyControllerTest {
 
         // When & Then
         mockMvc.perform(post("/properties")
+                .with(csrf())
                 .param("id", "1")
                 .param("name", "更新された物件")
                 .param("address", "東京都渋谷区1-2-3")
@@ -168,9 +180,11 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenValidationFails_ShouldReturnForm() throws Exception {
         // When & Then
         mockMvc.perform(post("/properties")
+                .with(csrf())
                 .param("name", "") // Invalid: empty name
                 .param("address", "東京都渋谷区1-2-3")
                 .param("area", "25.5"))
@@ -182,13 +196,15 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_WhenNoActiveLeases_ShouldDeleteAndRedirect() throws Exception {
         // Given
         when(leaseService.hasActiveLeases(1L)).thenReturn(false);
         doNothing().when(propertyService).deleteProperty(1L);
 
         // When & Then
-        mockMvc.perform(post("/properties/1/delete"))
+        mockMvc.perform(post("/properties/1/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/properties"))
                 .andExpect(flash().attributeExists("message"));
@@ -198,13 +214,15 @@ class PropertyControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_WhenActiveLeasesExist_ShouldNotDeleteAndShowError() throws Exception {
         // Given
         when(leaseService.hasActiveLeases(1L)).thenReturn(true);
         when(propertyService.getPropertyById(1L)).thenReturn(testProperty);
 
         // When & Then
-        mockMvc.perform(post("/properties/1/delete"))
+        mockMvc.perform(post("/properties/1/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/properties/1"))
                 .andExpect(flash().attributeExists("error"));

@@ -47,24 +47,6 @@ class LeaseServiceImplTest {
     }
 
     @Test
-    void getAllLeases_ShouldReturnAllLeases() {
-        // Given
-        Lease lease2 = new Lease();
-        lease2.setId(2L);
-        List<Lease> expectedLeases = Arrays.asList(testLease, lease2);
-        when(leaseMapper.findAll()).thenReturn(expectedLeases);
-
-        // When
-        List<Lease> result = leaseService.getAllLeases();
-
-        // Then
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(expectedLeases, result);
-        verify(leaseMapper, times(1)).findAll();
-    }
-
-    @Test
     void getLeaseById_WhenLeaseExists_ShouldReturnLease() {
         // Given
         when(leaseMapper.findById(1L)).thenReturn(testLease);

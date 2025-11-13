@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,6 +47,7 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void list_ShouldReturnTenantListPage() throws Exception {
         // Given
         List<Tenant> tenants = Arrays.asList(testTenant);
@@ -60,6 +63,7 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void newForm_ShouldReturnFormPage() throws Exception {
         // When & Then
         mockMvc.perform(get("/tenants/new"))
@@ -69,6 +73,7 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenTenantExists_ShouldReturnFormPage() throws Exception {
         // Given
         when(tenantService.getTenantById(1L)).thenReturn(testTenant);
@@ -85,6 +90,7 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void editForm_WhenTenantDoesNotExist_ShouldRedirectToList() throws Exception {
         // Given
         when(tenantService.getTenantById(999L)).thenReturn(null);
@@ -96,12 +102,14 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenNewTenant_ShouldCreateAndRedirect() throws Exception {
         // Given
         doNothing().when(tenantService).createTenant(any(Tenant.class));
 
         // When & Then
         mockMvc.perform(post("/tenants")
+                .with(csrf())
                 .param("fullName", "新規入居者")
                 .param("phone", "080-1111-2222")
                 .param("email", "new@example.com"))
@@ -113,12 +121,14 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenUpdateTenant_ShouldUpdateAndRedirect() throws Exception {
         // Given
         doNothing().when(tenantService).updateTenant(any(Tenant.class));
 
         // When & Then
         mockMvc.perform(post("/tenants")
+                .with(csrf())
                 .param("id", "1")
                 .param("fullName", "更新された名前")
                 .param("phone", "090-1234-5678")
@@ -131,9 +141,11 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void save_WhenValidationFails_ShouldReturnForm() throws Exception {
         // When & Then
         mockMvc.perform(post("/tenants")
+                .with(csrf())
                 .param("fullName", "") // Invalid: empty name
                 .param("email", "invalid-email")) // Invalid email format
                 .andExpect(status().isOk())
@@ -144,13 +156,15 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_WhenNoLeases_ShouldDeleteAndRedirect() throws Exception {
         // Given
         when(leaseService.getLeasesByTenantId(1L)).thenReturn(Arrays.asList());
         doNothing().when(tenantService).deleteTenant(1L);
 
         // When & Then
-        mockMvc.perform(post("/tenants/1/delete"))
+        mockMvc.perform(post("/tenants/1/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tenants"))
                 .andExpect(flash().attributeExists("message"));
@@ -160,6 +174,7 @@ class TenantControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_WhenLeasesExist_ShouldNotDeleteAndShowError() throws Exception {
         // Given
         com.example.app.model.Lease lease = new com.example.app.model.Lease();
@@ -167,7 +182,8 @@ class TenantControllerTest {
         when(leaseService.getLeasesByTenantId(1L)).thenReturn(Arrays.asList(lease));
 
         // When & Then
-        mockMvc.perform(post("/tenants/1/delete"))
+        mockMvc.perform(post("/tenants/1/delete")
+                .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tenants"))
                 .andExpect(flash().attributeExists("error"));
