@@ -21,11 +21,6 @@ public class LeaseServiceImpl implements LeaseService {
     private final LeaseMapper leaseMapper;
     
     @Override
-    public List<Lease> getAllLeases() {
-        return leaseMapper.findAll();
-    }
-    
-    @Override
     public Lease getLeaseById(Long id) {
         return leaseMapper.findById(id);
     }

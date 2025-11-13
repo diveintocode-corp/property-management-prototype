@@ -12,14 +12,6 @@ import java.util.List;
 @Mapper
 public interface LeaseMapper {
     /**
-     * すべての賃貸契約情報をデータベースから取得します。
-     * 関連する物件情報と入居者情報も合わせて取得します。
-     * 
-     * @return 契約情報のリスト
-     */
-    List<Lease> findAll();
-
-    /**
      * 指定されたIDの賃貸契約情報をデータベースから取得します。
      * 関連する物件情報と入居者情報も合わせて取得します。
      * 

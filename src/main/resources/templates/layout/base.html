@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,8 +13,21 @@
         <div class="nav-content">
             <a href="/" class="nav-brand">不動産管理システム</a>
             <ul class="nav-links">
-                <li><a th:href="@{/properties}">物件一覧</a></li>
-                <li><a th:href="@{/tenants}">入居者一覧</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/properties}">物件一覧</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/tenants}">入居者一覧</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <span style="color: white; margin-right: 10px;" sec:authentication="name">ユーザー名</span>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" style="background: none; border: none; color: white; cursor: pointer; padding: 0.5rem 0;">
+                            ログアウト
+                        </button>
+                    </form>
+                </li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">ログイン</a></li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">登録</a></li>
             </ul>
         </div>
     </nav>

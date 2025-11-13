@@ -54,11 +54,6 @@
         JOIN tenants t ON l.tenant_id = t.id
     </sql>
     
-    <select id="findAll" resultMap="leaseWithDetails">
-        <include refid="selectLeaseWithDetails"/>
-        ORDER BY l.start_date DESC
-    </select>
-    
     <select id="findById" resultMap="leaseWithDetails">
         <include refid="selectLeaseWithDetails"/>
         WHERE l.id = #{id}

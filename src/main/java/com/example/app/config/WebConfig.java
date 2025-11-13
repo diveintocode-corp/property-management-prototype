@@ -6,12 +6,12 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 日付と時刻のフォーマット設定を管理するコンフィグレーションクラス。
- * アプリケーション全体での日付と時刻の表示形式をISO形式に統一します。
+ * Web設定を管理するコンフィグレーションクラス。
+ * 日付フォーマット設定などを行います。
  */
 @Configuration
-public class DateTimeConfig implements WebMvcConfigurer {
-
+public class WebConfig implements WebMvcConfigurer {
+    
     /**
      * 日付と時刻のフォーマッタを登録するメソッド。
      * ISO形式の日付フォーマットを全システムで使用するように設定します。
@@ -25,3 +25,4 @@ public class DateTimeConfig implements WebMvcConfigurer {
         registrar.registerFormatters(registry);
     }
 }
+

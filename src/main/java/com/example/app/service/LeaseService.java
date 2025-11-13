@@ -9,13 +9,6 @@ import java.util.List;
  */
 public interface LeaseService {
     /**
-     * すべての賃貸契約情報を取得します。
-     * 
-     * @return 登録されているすべての契約のリスト
-     */
-    List<Lease> getAllLeases();
-
-    /**
      * 指定されたIDの賃貸契約情報を取得します。
      * 
      * @param id 取得したい契約のID
